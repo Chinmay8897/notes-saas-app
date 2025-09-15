@@ -1,4 +1,14 @@
-import 'dotenv/config';
+// Load environment variables based on file availability
+import { config } from 'dotenv';
+import { existsSync } from 'fs';
+
+// Load environment variables - prefer .env.server for backend secrets
+if (existsSync('.env.server')) {
+  config({ path: '.env.server' });
+} else {
+  config(); // fallback to .env
+}
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

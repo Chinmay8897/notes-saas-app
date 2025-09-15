@@ -1,53 +1,77 @@
 # Multi-Tenant Notes Application
 
-## Deployment Instructions
+## Important: Separate Frontend and Backend Deployment
+
+This application has **frontend** and **backend** components that must be deployed separately.
 
 ### Frontend Deployment (Netlify)
 
-1. **Build Settings:**
+1. **Environment Variables in Netlify Dashboard:**
+   ```
+   VITE_API_URL=https://your-backend-api.herokuapp.com/api
+   ```
+
+2. **Build Settings:**
    - Build command: `npm run build`
    - Publish directory: `dist`
-   - Node version: 18
+   - Node version: 20
 
-2. **Environment Variables in Netlify:**
-   ```
-   VITE_API_URL=https://your-backend-url.com/api
-   ```
-
-3. **Files Added for Netlify:**
+3. **Files for Netlify:**
    - `netlify.toml` - Build configuration and redirects
    - `public/_redirects` - SPA routing support
-   - `.env.production` - Production environment template
 
-### Backend Deployment
+### Backend Deployment (Heroku/Railway/Vercel)
 
-Deploy your backend (server.js and API routes) to:
-- Heroku
-- Railway
-- Vercel
-- Digital Ocean
-- AWS
+Deploy **only** these backend files:
+- `server.js`
+- `api/` folder
+- `lib/` folder
+- `package.json`
+- `.env.server` (rename to `.env` on server)
 
-Make sure to set these environment variables on your backend hosting platform:
+**Backend Environment Variables:**
 ```
 MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_jwt_secret_key
 NODE_ENV=production
 FRONTEND_URL=https://your-netlify-app.netlify.app
+PORT=3000
 ```
 
-### Important Notes
+### Security Note
 
-1. The frontend and backend are separate deployments
-2. Update `VITE_API_URL` in Netlify to point to your deployed backend
-3. Update CORS settings in your backend to allow your Netlify domain
-4. Make sure your backend accepts requests from your frontend domain
+- ❌ **Never** include `MONGODB_URI` or `JWT_SECRET` in frontend environment files
+- ✅ **Only** use `VITE_` prefixed variables in frontend
+- ✅ Keep backend secrets in separate deployment
 
-## Local Development
+### Local Development
 
 ```bash
+# Install dependencies
 npm install
+
+# Start both frontend and backend
 npm run dev
 ```
 
-This runs both frontend (port 3000) and backend (port 3002) concurrently.
+This runs:
+- Frontend: http://localhost:3000 (Vite)
+- Backend: http://localhost:3002 (Express)
+
+### File Structure
+
+```
+Frontend files (deploy to Netlify):
+- src/
+- public/
+- index.html
+- package.json
+- vite.config.js
+- netlify.toml
+
+Backend files (deploy to Heroku/Railway):
+- server.js
+- api/
+- lib/
+- .env.server (rename to .env)
+```

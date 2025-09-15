@@ -3,7 +3,8 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,JWT_SECRET,MONGODB_URI"
 
 [[redirects]]
   from = "/*"
